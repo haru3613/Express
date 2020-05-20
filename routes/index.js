@@ -40,5 +40,15 @@ router.get('/api/posts',(req, res) => {
   res.send(req.query);
 });
 
+// POST method
+router.post('/api/courses', (req, res) => {
+  let course = {
+    id: courses.length + 1,  //沒有資料庫，先手動新增ID
+    name: req.body.name     // 取得傳送來的name
+  }
+  courses.push(course); //加入課程陣列
+  res.send(course);
+});
+
 
 module.exports = router;
