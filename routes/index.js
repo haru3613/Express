@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var Joi = require('joi');
+
 
 const courses = [
   {id:1, name:'course1'},
@@ -40,8 +42,22 @@ router.get('/api/posts',(req, res) => {
   res.send(req.query);
 });
 
+
 // POST method
 router.post('/api/courses', (req, res) => {
+
+  let schema = {
+    name: Joi.string().min(3).required()
+  };
+  // 驗證是否符合格式
+  let result = Joi.validate(req.body, schema);
+  console.log(result);
+  // 錯誤就回傳400
+  if (result.error) {
+    res.status(400).send(result.error.details[0].message);
+    return ;
+  }
+  
   let course = {
     id: courses.length + 1,  //沒有資料庫，先手動新增ID
     name: req.body.name     // 取得傳送來的name
