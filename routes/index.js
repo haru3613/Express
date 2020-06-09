@@ -1,70 +1,12 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var Joi = require('joi');
-
-
-const courses = [
-  {id:1, name:'course1'},
-  {id:2, name:'course2'},
-  {id:3, name:'course3'}
-];
-
-/* GET home page. */
-router.get('/', (req, res, next) => {
-  res.render('index', { title: 'Express' });
-});
-
-router.get('/test', (req, res, next) => {
-  res.send('This is my add router');
-});
-
-// Replace function to => 
-// Test Restful API
-router.get('/api/courses/:id', (req, res) => {
-  let course = courses.find(
-    courses => courses.id === parseInt(req.params.id)
-      );
-  if (!course) {
-    res.status(404).send('The course with the given ID was not found');
-    return ;
-  }
-  res.send(course);
-});
-
-// example: http://localhost:3000/api/posts/2018/5
-router.get('/api/posts/:year/:month',(req, res) => {
-  res.send(req.params);
-});
-
-// example: http://localhost:3000/api/posts?sortBy=name
-router.get('/api/posts',(req, res) => {
-  res.send(req.query);
-});
+const Joi = require('joi');
+const tutorials = require("../controllers/tutorial.controller.js");
 
 
-// POST method
-router.post('/api/courses', (req, res) => {
+router.post("/", tutorials.create);
 
-  let schema = {
-    name: Joi.string().min(3).required()
-  };
-  // 驗證是否符合格式
-  let result = Joi.validate(req.body, schema);
-  console.log(result);
-  // 錯誤就回傳400
-  if (result.error) {
-    res.status(400).send(result.error.details[0].message);
-    return ;
-  }
-  
-  let course = {
-    id: courses.length + 1,  //沒有資料庫，先手動新增ID
-    name: req.body.name     // 取得傳送來的name
-  }
-  courses.push(course); //加入課程陣列
-  res.send(course);
-});
 
 
 module.exports = router;
