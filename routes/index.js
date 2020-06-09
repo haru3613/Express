@@ -1,10 +1,12 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+const Joi = require('joi');
+const tutorials = require("../controllers/tutorial.controller.js");
+
+
+router.post("/", tutorials.create);
+
 
 
 module.exports = router;
